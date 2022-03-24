@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText editTextEmail;
     private EditText editTextPassword;
-
+    private View progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         editTextEmail = (EditText) findViewById(R.id.login_email);
         editTextPassword = (EditText) findViewById(R.id.login_password);
+        progressBar = findViewById(R.id.progressBar);
 
     }
 
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             v.setEnabled(true);
             return;
         }
-
+        progressBar.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -71,7 +72,10 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d( "test", "signInWithEmail:success");
+                            Toast.makeText(getApplicationContext(), "Authentication successful.",
+                                    Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
+                            setContentView(R.layout.activity_home);
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -79,10 +83,9 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             v.setEnabled(true);
+                            progressBar.setVisibility(View.GONE);
                             return;
                         }
-
-                        // ...
                     }
                 });
 
