@@ -10,10 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.P4">
         <activity
-            android:name=".ChoosePage"
-            android:exported="false" />
-        <activity
-            android:name=".SiteType1Activity"
+            android:name=".ChoosePageActivity"
             android:exported="false" />
         <activity
             android:name=".SiteTypeActivity"
