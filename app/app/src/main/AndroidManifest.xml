@@ -10,10 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.P4">
         <activity
-            android:name=".home"
+            android:name=".ChoosePage"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SiteType1Activity"
+            android:exported="false" />
+        <activity
+            android:name=".SiteTypeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

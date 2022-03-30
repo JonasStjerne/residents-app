@@ -11,21 +11,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class home extends AppCompatActivity {
-    private Button logOutBtn;
+public class SiteTypeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("action", "Created");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_sitetype);
+    }
 
-        logOutBtn = (Button) findViewById(R.id.logOutBtn);
-        logOutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("test", "hello");
-            }
-        });
+    public void logout(View v) {
+        v.setEnabled(false);
+        Log.d("action", "Log Out");
     }
 }
