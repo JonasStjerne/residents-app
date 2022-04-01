@@ -31,6 +31,7 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
     Button submitButton;
     String pageId;
     FirebaseFirestore db;
+    TextView deletePageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
         pageContentEl = (EditText) findViewById(R.id.pageContent);
         loadingSpinner = (ProgressBar) findViewById(R.id.loadingSpinner);
         submitButton = (Button) findViewById(R.id.submitButton);
+        deletePageButton = (TextView) findViewById(R.id.deletePageButton);
         pageId = null;
 
         Intent intent = getIntent();
@@ -61,6 +63,7 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                                         document.getData().get("icon").toString()
                                 );
                                 pageId = document.getId().toString();
+                                deletePageButton.setVisibility(View.VISIBLE);
                             }
                         } else {
                             Log.w("TAG", "Error getting documents.", task.getException());
@@ -120,5 +123,22 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                     });
         }
 
+    }
+
+    public void deletePage(View v) {
+        db.collection("pages").document(pageId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firebase", "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firebase", "Error deleting document", e);
+                    }
+                });
     }
 }
