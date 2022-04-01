@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            startActivity(new Intent(this, SiteTypeActivity.class));
+            startActivity(new Intent(this, PageTypeActivity.class));
         }
     }
 
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            startActivity(new Intent(v.getContext(), SiteTypeActivity.class));
+                            startActivity(new Intent(v.getContext(), PageTypeActivity.class));
 
                         } else {
                             // If sign in fails, display a message to the user.

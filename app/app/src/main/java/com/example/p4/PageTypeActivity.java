@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class SiteTypeActivity extends AppCompatActivity {
+public class PageTypeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -3,6 +3,7 @@ package com.example.p4;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,8 @@ public class ChoosePageActivity extends AppCompatActivity {
 
         loadingSpinner = (ProgressBar) findViewById(R.id.loadingSpinner);
 
+        pagesArr.add("Ny Side");
+
         db.collection("pages")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -62,8 +65,14 @@ public class ChoosePageActivity extends AppCompatActivity {
         loadingSpinner.setVisibility(View.GONE);
     }
 
-    private void submitPageSelection(View v) {
+    public void submitPageSelection(View v) {
         //Send to new page with id of the selected page
-        Log.d("Submit", "Button pressed");
+
+
+        String selectedPage = spinnerPages.getSelectedItem().toString();
+        Log.d("selectedPage", selectedPage);
+        Intent intent = new Intent(this, PageEditAndCreateActivity.class);
+        intent.putExtra("selectedPage", selectedPage);
+        startActivity(intent);
     }
 }
