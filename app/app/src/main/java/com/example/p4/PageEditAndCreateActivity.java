@@ -38,6 +38,10 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.noties.markwon.Markwon;
+import io.noties.markwon.editor.MarkwonEditor;
+import io.noties.markwon.editor.MarkwonEditorTextWatcher;
+
 public class PageEditAndCreateActivity extends AppCompatActivity {
     EditText pageTitleEl;
     ProgressBar loadingSpinner;
@@ -108,6 +112,15 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        // obtain Markwon instance
+        final Markwon markwon = Markwon.create(this);
+
+        // create editor
+        final MarkwonEditor editor = MarkwonEditor.create(markwon);
+
+        // set edit listener
+        pageContentEl.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
     }
 
     private void setPageFields(String name, String content, String icon) {
