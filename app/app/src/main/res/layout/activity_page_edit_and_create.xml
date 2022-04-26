@@ -7,43 +7,32 @@
     tools:context=".PageEditAndCreateActivity">
 
     <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Titel på side"
-        app:layout_constraintBottom_toTopOf="@+id/pageTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.134"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
         android:id="@+id/iconText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="47dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="14dp"
         android:text="Ikon for side"
+<<<<<<< Updated upstream
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.135"
+=======
+>>>>>>> Stashed changes
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pageTitle"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/pageTitle" />
 
     <EditText
         android:id="@+id/pageTitle"
         android:layout_width="320dp"
         android:layout_height="47dp"
+        android:layout_marginTop="32dp"
         android:hint="Titel"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.115" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/contentText"
@@ -60,30 +49,44 @@
 
     <EditText
         android:id="@+id/pageContent"
-        android:layout_width="315dp"
-        android:layout_height="205dp"
-        android:layout_marginTop="168dp"
+        android:layout_width="319dp"
+        android:layout_height="327dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< Updated upstream
         app:layout_constraintHorizontal_bias="0.416"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.354" />
+=======
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconImage" />
+>>>>>>> Stashed changes
 
     <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< Updated upstream
         android:layout_marginTop="8dp"
+=======
+        android:layout_marginBottom="36dp"
+>>>>>>> Stashed changes
         android:onClick="handlePageSubmit"
         android:text="Opret"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
+<<<<<<< Updated upstream
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pageContent" />
+=======
+        app:layout_constraintStart_toStartOf="parent" />
+>>>>>>> Stashed changes
 
     <ProgressBar
         android:id="@+id/loadingSpinner"
@@ -94,7 +97,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+<<<<<<< Updated upstream
         app:layout_constraintVertical_bias="0.414" />
+=======
+        app:layout_constraintVertical_bias="0.594" />
+
+    <TextView
+        android:id="@+id/contentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="1dp"
+        android:text="Indhold"
+        app:layout_constraintBottom_toTopOf="@+id/pageContent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.123"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconImage"
+        app:layout_constraintVertical_bias="0.8" />
+>>>>>>> Stashed changes
 
     <TextView
         android:id="@+id/deletePageButton"
@@ -109,4 +130,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submitButton" />
 
+<<<<<<< Updated upstream
+=======
+    <ImageView
+        android:id="@+id/iconImage"
+        android:layout_width="80dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.132"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconText"
+        app:srcCompat="@android:drawable/ic_menu_upload_you_tube" />
+
+>>>>>>> Stashed changes
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.noties.markwon.Markwon;
+import io.noties.markwon.editor.MarkwonEditor;
+import io.noties.markwon.editor.MarkwonEditorTextWatcher;
+
 public class PageEditAndCreateActivity extends AppCompatActivity {
     EditText pageTitleEl;
     ProgressBar loadingSpinner;
@@ -33,6 +37,14 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
     FirebaseFirestore db;
     TextView deletePageButton;
 
+<<<<<<< Updated upstream
+=======
+
+    String base64Img;
+    private ActivityResultLauncher<Intent> launcher;
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+>>>>>>> Stashed changes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +83,32 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                         loadingSpinner.setVisibility(View.GONE);
                     }
                 });
+<<<<<<< Updated upstream
+=======
+        // used when image is selected in photo album
+        launcher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                onImageSelected(data);
+                            }
+
+                        }
+                    }
+                }
+        );
+
+        final Markwon markwon = Markwon.create(this);
+
+        // create editor
+        final MarkwonEditor editor = MarkwonEditor.create(markwon);
+
+        // set edit listener
+        pageContentEl.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
+>>>>>>> Stashed changes
     }
 
 
