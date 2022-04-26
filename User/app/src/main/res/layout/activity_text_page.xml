@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/content"
         android:layout_width="300dp"
         android:layout_height="224dp"
         android:text="Indhold"
