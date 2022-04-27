@@ -120,7 +120,7 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
 
         Map<String, Object> page = new HashMap<>();
         page.put("name", pageTitleEl.getText().toString());
-        page.put("icon", "Not implemented");
+        page.put("icon", base64Img);
         page.put("content", pageContentEl.getText().toString());
         page.put("type", "textPage");
 

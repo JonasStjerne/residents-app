@@ -81,16 +81,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/key" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:backgroundTint="#0FFFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/qr" />
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="80dp"
@@ -110,12 +100,11 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/imageView9"
+        android:layout_width="414dp"
+        android:layout_height="262dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/footer1" />
+        app:srcCompat="@drawable/footer2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
