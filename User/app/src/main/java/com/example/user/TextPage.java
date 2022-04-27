@@ -28,7 +28,9 @@ public class TextPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_page);
+        contentContainer = (TextView) findViewById(R.id.content);
 
+        final Markwon markwon = Markwon.create(this);
 
         Intent intent = getIntent();
         String pageId = intent.getStringExtra("PageId");
@@ -43,6 +45,9 @@ public class TextPage extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d("TextPage", "DocumentSnapshot data: " + document.getData());
 
+                        // set markdown
+                        String content = document.getData().get("content").toString();
+                        markwon.setMarkdown(contentContainer, content);
                     } else {
                         Log.d("TextPage", "No such document");
                     }
@@ -52,12 +57,9 @@ public class TextPage extends AppCompatActivity {
             }
         });
 
-        contentContainer = (TextView) findViewById(R.id.content);
 
-        final Markwon markwon = Markwon.create(this);
 
-        // set markdown
-        markwon.setMarkdown(contentContainer, "# Hello there!");
+
 
     }
 }

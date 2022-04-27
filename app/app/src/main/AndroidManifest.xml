@@ -11,13 +11,15 @@
         android:theme="@style/Theme.P4" >
         <activity
             android:name=".PageEditAndCreateActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ChoosePageActivity"/>
         <activity
             android:name=".ChoosePageActivity"
             android:exported="false" />
         <activity
             android:name=".PageTypeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ChoosePageActivity"/>
         <activity
             android:name=".LoginActivity"
             android:exported="true" >
