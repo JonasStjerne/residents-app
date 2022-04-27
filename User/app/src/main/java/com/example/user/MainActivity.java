@@ -3,6 +3,7 @@ package com.example.user;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         String pageId = document.getId().toString();
-                        Log.d("TAG", pageId + " => " + document.getData());
+                        //Log.d("TAG", pageId + " => " + document.getData());
                         Log.d("Main", "Got document: " + document.getData().get("name").toString());
 
                         if (document.getData().get("name") != null) {
@@ -70,15 +71,23 @@ public class MainActivity extends AppCompatActivity {
 
                         if (document.getData().get("icon") != null) {
                             String base64Img = document.getData().get("icon").toString();
-                            Log.d("Main", "Decode icon: " + base64Img);
-                            if (! "Not implemented".equalsIgnoreCase(base64Img)) {
+                            Log.d("Main", "Decode icon: " + (base64Img.length() < 60 ? base64Img : base64Img.substring(0, 59)));
+                            if (base64Img.length()>0 && ! "Not implemented".equalsIgnoreCase(base64Img)) {
                                 if (base64Img.startsWith("data:image/jpeg;base64,")) {
                                     base64Img = base64Img.substring("data:image/jpeg;base64,".length());
                                 }
-                                byte[] imgData = Base64.getDecoder().decode(base64Img);
-                                Bitmap image = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
-                                icons[i].setImageBitmap(image);
-                                icons[i].setVisibility(View.VISIBLE);
+
+                                try {
+                                    base64Img = base64Img.replaceAll("\n", "");
+                                    byte[] imgData = Base64.getDecoder().decode(base64Img);
+                                    Bitmap image = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
+                                    icons[i].setImageBitmap(image);
+                                    icons[i].setVisibility(View.VISIBLE);
+
+                                }
+                                catch (Exception e) {
+                                    Log.e("Main", "Error decoding image", e);
+                                }
 
                                 icons[i].setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -88,10 +97,15 @@ public class MainActivity extends AppCompatActivity {
                                             String pageType = document.getData().get("type").toString();
                                             Log.d("Main", "Navigate to page with type " + pageType + " and id " + pageId);
                                             if ("textPage".equalsIgnoreCase(pageType)) {
-                                                // TODO
+                                                Intent intent = new Intent(MainActivity.this, TextPage.class);
+                                                intent.putExtra("PageId", pageId);
+                                                startActivity(intent);
+
                                             }
                                             else if ("dropdown".equalsIgnoreCase(pageType)) {
-                                                // TODO
+                                                Intent intent = new Intent(MainActivity.this, DropdownPage.class);
+                                                intent.putExtra("PageId", pageId);
+                                                startActivity(intent);
                                             }
                                         }
                                     }
