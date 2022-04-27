@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -23,11 +24,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -145,12 +148,14 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Log.d("Firebase", "DocumentSnapshot written with ID: " + documentReference.getId());
+                            Toast.makeText(getApplicationContext(), "New page created successfully", Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.w("Firebase", "Error adding document", e);
+                            Toast.makeText(getApplicationContext(), "Failed to create page", Toast.LENGTH_LONG).show();
                         }
                     });
         } else {
@@ -162,12 +167,14 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("Firebase", "DocumentSnapshot successfully written!");
+                            Toast.makeText(getApplicationContext(), "Page changes saved", Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.w("Firebase", "Error writing document", e);
+                            Toast.makeText(getApplicationContext(), "Failed to edit page", Toast.LENGTH_LONG).show();
                         }
                     });
         }
