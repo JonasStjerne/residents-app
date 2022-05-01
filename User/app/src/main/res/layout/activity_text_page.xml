@@ -7,15 +7,14 @@
     tools:context=".TextPage">
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/pictureImage"
         android:layout_width="243dp"
         android:layout_height="171dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22000003"
-        app:srcCompat="@drawable/vaskerum" />
+        app:layout_constraintVertical_bias="0.22000003" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -23,7 +22,7 @@
         android:layout_height="37dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView5"
+        app:layout_constraintBottom_toTopOf="@+id/pictureImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/key" />
@@ -35,5 +34,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        app:layout_constraintTop_toBottomOf="@+id/pictureImage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

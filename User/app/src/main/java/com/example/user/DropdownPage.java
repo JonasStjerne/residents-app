@@ -63,86 +63,82 @@ public class DropdownPage extends AppCompatActivity {
     private void buildContent(DocumentSnapshot document) {
 
         View lastView = null;
-        int cardsNo = 8;
 
+
+        int cardsNo = 3;
         for (int i = 1; i <= cardsNo; i++) {
 
-            CardView card = new CardView(this);
-            card.setId(i + 10);
-            card.setPadding(15,5,15,5);
-            card.setCardBackgroundColor(Color.BLUE);
-            card.setCardElevation(2);
-            card.setContentPadding(5, 5, 5, 5);
-            card.setRadius(20);
+            // Title bar with title and image
+            ConstraintLayout titleBar = new ConstraintLayout(this);
+            titleBar.setId(50 + i);
+            titleBar.setBackgroundColor(Color.DKGRAY);
+            titleBar.setPadding(5, 5, 5, 5);
+            titleBar.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
 
-            card.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            TextView tv = new TextView(this);
-            tv.setText("Hello world " + (String.valueOf(i)));
-            tv.setId(100 + i);
-            tv.setTextSize(18);
-            tv.setPadding(5, 5, 0, 5);
-            tv.setBackgroundResource(R.color.purple_500);
-
-            TextView body = new TextView(this);
-            body.setId(200 + i);
-            body.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nec risus ultrices, pharetra eros pulvinar, auctor metus. Suspendisse porta interdum velit nec volutpat");
-            body.setTextSize(12);
-            body.setPadding(5, 3, 0, 3);
-            body.setBackgroundResource(R.color.purple_200);
+            TextView title = new TextView(this);
+            title.setText("Hello world " + (String.valueOf(i)));
+            title.setId(100 + i);
+            title.setTextSize(18);
+            title.setTextColor(Color.WHITE);
+            title.setPadding(5, 5, 0, 5);
 
             ImageView img = new ImageView(this);
             img.setId(300 + i);
             img.setImageIcon(Icon.createWithResource(this, android.R.drawable.arrow_down_float));
-            img.setMinimumWidth(30);
-            img.setMinimumHeight(30);
+            img.setMinimumWidth(60);
+            img.setMinimumHeight(60);
 
-            // Create laout for card and add content
+            titleBar.addView(title);
+            titleBar.addView(img);
+
+            // Constrain title to left and image to right
+            ConstraintSet titleBarConstraints = new ConstraintSet();
+            titleBarConstraints.clone(titleBar);
+            titleBarConstraints.connect(title.getId(), ConstraintSet.LEFT, titleBar.getId(), ConstraintSet.LEFT, 20);
+            titleBarConstraints.connect(img.getId(), ConstraintSet.RIGHT, titleBar.getId(), ConstraintSet.RIGHT, 20);
+
+            // Center image between top and bottom
+            titleBarConstraints.connect(img.getId(), ConstraintSet.TOP, titleBar.getId(), ConstraintSet.TOP);
+            titleBarConstraints.connect(img.getId(), ConstraintSet.BOTTOM, titleBar.getId(), ConstraintSet.BOTTOM);
+            titleBarConstraints.applyTo(titleBar);
+
+            // Card content with title bar and body text
             ConstraintLayout cardLayout = new ConstraintLayout(this);
-            cardLayout.addView(tv);
+            cardLayout.setId(70 + i);
+            cardLayout.setPadding(5, 5, 5, 5);
+            cardLayout.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+
+            TextView body = new TextView(this);
+            body.setId(200 + i);
+            body.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nec risus ultrices, pharetra eros pulvinar, auctor metus. Suspendisse porta interdum velit nec volutpat");
+            body.setTextSize(16);
+            body.setPadding(5, 3, 0, 3);
+            body.setTextColor(Color.DKGRAY);
+            body.setVisibility(View.GONE); // start out as hidden
+
+            cardLayout.addView(titleBar);
             cardLayout.addView(body);
-            cardLayout.addView(img);
 
-            card.addView(cardLayout);
-
-            // Constraints for content in new card (title, body, image)
-
+            // Constrain title bar to top and body to follow title bar
             ConstraintSet cardConstraints = new ConstraintSet();
             cardConstraints.clone(cardLayout);
-
-            cardConstraints.connect(tv.getId(), ConstraintSet.TOP, cardLayout.getId(), ConstraintSet.TOP, 5);
-            cardConstraints.connect(tv.getId(), ConstraintSet.LEFT, cardLayout.getId(), ConstraintSet.LEFT, 5);
-            cardConstraints.connect(tv.getId(), ConstraintSet.RIGHT, cardLayout.getId(), ConstraintSet.RIGHT, 5);
-
-            cardConstraints.connect(img.getId(), ConstraintSet.TOP, cardLayout.getId(), ConstraintSet.TOP, 5);
-            cardConstraints.connect(img.getId(), ConstraintSet.RIGHT, cardLayout.getId(), ConstraintSet.RIGHT, 5);
-
-            cardConstraints.connect(body.getId(), ConstraintSet.LEFT, cardLayout.getId(), ConstraintSet.LEFT, 5);
-            cardConstraints.connect(body.getId(), ConstraintSet.RIGHT, cardLayout.getId(), ConstraintSet.RIGHT, 5);
-            cardConstraints.connect(body.getId(), ConstraintSet.TOP, tv.getId(), ConstraintSet.BOTTOM, 20);
-
+            cardConstraints.connect(titleBar.getId(), ConstraintSet.TOP, cardLayout.getId(), ConstraintSet.TOP);
+            cardConstraints.connect(body.getId(), ConstraintSet.TOP, titleBar.getId(), ConstraintSet.BOTTOM, 10);
             cardConstraints.applyTo(cardLayout);
 
-            // Add new card to outer layout
-            layout.addView(card);
 
-            // Constraints for new card
-            ConstraintSet constraints = new ConstraintSet();
-            constraints.clone(layout);
+            // Finally a Card view with card content (titleBar (title and image) and body)
+            CardView card = new CardView(this);
+            card.setId(i + 10);
+            card.setPadding(15,5,15,5);
+            card.setCardBackgroundColor(Color.LTGRAY);
+            card.setCardElevation(5);
+            card.setContentPadding(5, 5, 5, 5);
+            card.setRadius(20);
+            card.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+            card.addView(cardLayout);
 
-            constraints.connect(card.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 10);
-            constraints.connect(card.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 10);
-
-            if (lastView != null) {
-                Log.d("Detail", "From: " + String.valueOf(card.getId()) + " -> " + String.valueOf(lastView.getId()));
-                constraints.connect(card.getId(), ConstraintSet.TOP, lastView.getId(), ConstraintSet.BOTTOM, 20);
-            } else {
-                constraints.connect(card.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, 5);
-            }
-            lastView = card;
-
-            constraints.applyTo(layout);
-
+            // On click listener that will show or hide the card body and change icon
             card.setOnClickListener(v -> {
                 boolean visible = body.getVisibility() == View.VISIBLE;
                 if (visible) {
@@ -155,18 +151,27 @@ public class DropdownPage extends AppCompatActivity {
                 }
             });
 
-        }
+            // Add card to outer layout
+            layout.addView(card);
 
-        // Start all card with hidden body
-        // must be done after layout above
-        for (int i = 1; i <= cardsNo; i++) {
-            View v = findViewById(200 + i);
-            if (v != null) {
-                v.setVisibility(View.GONE);
+            // Constrain card to outer layout and other cards on outer layout
+            ConstraintSet constraints = new ConstraintSet();
+            constraints.clone(layout);
+
+            // Add margins to cards
+            constraints.connect(card.getId(), ConstraintSet.LEFT, layout.getId(), ConstraintSet.LEFT, 20);
+            constraints.connect(card.getId(), ConstraintSet.RIGHT, layout.getId(), ConstraintSet.RIGHT, 20);
+
+            if (lastView != null) {
+                Log.d("Detail", "From: " + String.valueOf(card.getId()) + " -> " + String.valueOf(lastView.getId()));
+                constraints.connect(card.getId(), ConstraintSet.TOP, lastView.getId(), ConstraintSet.BOTTOM, 50);
+            } else {
+                constraints.connect(card.getId(), ConstraintSet.TOP, layout.getId(), ConstraintSet.TOP, 50);
             }
-            else {
-                Log.d("Detail", "Unable to find view with id " + String.valueOf(200 + i));
-            }
+            lastView = card;
+
+            constraints.applyTo(layout);
+
         }
     }
 }

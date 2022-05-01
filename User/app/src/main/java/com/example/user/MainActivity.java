@@ -9,13 +9,16 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -25,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView icons[] = new ImageView[4];
     private TextView texts[] = new TextView[4];
+    private TextView pageNoText;
+    private ImageButton prevButton;
+    private ImageButton nextButton;
 
     private int pageNumber = 0;
 
@@ -35,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        pageNoText = findViewById(R.id.pageNoText);
+        pageNoText.setText("Side" + String.valueOf(pageNumber + 1));
+
+        prevButton = findViewById(R.id.prevButton);
+        nextButton = findViewById(R.id.nextButton);
+
 
         icons[0] = findViewById(R.id.imageView1);
         icons[1] = findViewById(R.id.imageView2);
@@ -48,15 +60,43 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("Main", "Retriving documents from firebase");
 
+        prevButton.setOnClickListener(e -> {
+            if (pageNumber > 0) {
+                pageNumber--;
+                updateData();
+                pageNoText.setText("Side" + String.valueOf(pageNumber + 1));
+            }
+        });
+
+        nextButton.setOnClickListener(e -> {
+            pageNumber++;
+            updateData();
+            pageNoText.setText("Side" + String.valueOf(pageNumber + 1));
+        });
+
+
         db = FirebaseFirestore.getInstance();
-        CollectionReference pagesCollection = db.collection("pages");
-        pagesCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        updateData();
+
+   }
+
+    private void updateData() {
+        for (int i = 0; i < 4; i++) {
+            icons[i].setVisibility(View.INVISIBLE);
+            texts[i].setVisibility(View.INVISIBLE);
+        }
+
+        Log.d("Main", "updateDate");
+        db.collection("pages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     int i = 0;
+                    int offset = 4 * pageNumber;
+                    int n = 0;
                     for (QueryDocumentSnapshot document: task.getResult()) {
-                        if (i < pageNumber * 4) {
+                        if (n++ < offset) {
                             continue;
                         }
 
@@ -112,18 +152,17 @@ public class MainActivity extends AppCompatActivity {
                                 });
                             }
                         }
-
                         i++;
                         if (i == 4) {
-                            // more than more page
                             break;
                         }
-
                     }
                 }
                 else {
                     Log.w("Main", "Error getting firebase documents", task.getException());
                 }
-        }});
+            }});
+
     }
+
 }

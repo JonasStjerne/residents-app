@@ -41,9 +41,9 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.noties.markwon.Markwon;
-import io.noties.markwon.editor.MarkwonEditor;
-import io.noties.markwon.editor.MarkwonEditorTextWatcher;
+//import io.noties.markwon.Markwon;
+//import io.noties.markwon.editor.MarkwonEditor;
+//import io.noties.markwon.editor.MarkwonEditorTextWatcher;
 
 public class PageEditAndCreateActivity extends AppCompatActivity {
     EditText pageTitleEl;
@@ -54,9 +54,13 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
     FirebaseFirestore db;
     TextView deletePageButton;
     ImageView iconImage;
+    ImageView pictureImage;
 
-    String base64Img;
-    private ActivityResultLauncher<Intent> launcher;
+    String iconBase64Img;
+    private ActivityResultLauncher<Intent> iconLauncher;
+
+    String pictureBase64Img;
+    private ActivityResultLauncher<Intent> pictureLauncher;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -70,12 +74,14 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
         submitButton = (Button) findViewById(R.id.submitButton);
         deletePageButton = (TextView) findViewById(R.id.deletePageButton);
         iconImage = (ImageView) findViewById(R.id.iconImage);
+        pictureImage = (ImageView) findViewById(R.id.pictureImage);
         pageId = null;
 
         Intent intent = getIntent();
         String str = intent.getStringExtra("selectedPage");
 
-        iconImage.setOnClickListener(v -> selectImage());
+        iconImage.setOnClickListener(v -> selectIcon());
+        pictureImage.setOnClickListener(v -> selectPicture());
 
         db = FirebaseFirestore.getInstance();
         db.collection("pages").whereEqualTo("name", str)
@@ -100,15 +106,31 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                         loadingSpinner.setVisibility(View.GONE);
                     }
                 });
-        // used when image is selected in photo album
-        launcher = registerForActivityResult(
+        // used when icon is selected in photo album
+        iconLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
                         Intent data = result.getData();
                         if (data != null) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                onImageSelected(data);
+                                onIconSelected(data);
+                            }
+
+                        }
+                    }
+                }
+        );
+
+        // used when picture is selected in photo album
+        pictureLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                onPictureSelected(data);
                             }
 
                         }
@@ -117,13 +139,13 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
         );
 
         // obtain Markwon instance
-        final Markwon markwon = Markwon.create(this);
+        //final Markwon markwon = Markwon.create(this);
 
         // create editor
-        final MarkwonEditor editor = MarkwonEditor.create(markwon);
+        //final MarkwonEditor editor = MarkwonEditor.create(markwon);
 
         // set edit listener
-        pageContentEl.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
+        //pageContentEl.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
     }
 
     private void setPageFields(String name, String content, String icon) {
@@ -136,7 +158,8 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
 
         Map<String, Object> page = new HashMap<>();
         page.put("name", pageTitleEl.getText().toString());
-        page.put("icon", base64Img);
+        page.put("icon", iconBase64Img);
+        page.put("picture", pictureBase64Img);
         page.put("content", pageContentEl.getText().toString());
         page.put("type", "textPage");
 
@@ -198,14 +221,16 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                 });
     }
 
-    private void selectImage() {
+
+    // Icon
+    private void selectIcon() {
         final CharSequence[] options = {"Choose from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(PageEditAndCreateActivity.this);
         builder.setTitle("Add Photo!");
         builder.setItems(options, (dialog, item) -> {
             if (item == 0) {
                 Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                launcher.launch(intent);
+                iconLauncher.launch(intent);
             } else {
                 dialog.dismiss();
             }
@@ -213,8 +238,26 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
         builder.show();
     }
 
+
+    //Picture
+    private void selectPicture() {
+        final CharSequence[] options = {"Choose from Gallery", "Cancel"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(PageEditAndCreateActivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(options, (dialog, item) -> {
+            if (item == 0) {
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pictureLauncher.launch(intent);
+            } else {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void onImageSelected(Intent data) {
+    private void onIconSelected(Intent data) {
         Uri selectedImage = data.getData();
         Log.w("Selected Image: ", selectedImage.toString());
 
@@ -228,7 +271,29 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
             ContentResolver resolver = getApplicationContext().getContentResolver();
             Bitmap thumbnail = resolver.loadThumbnail(selectedImage, size, null);
             iconImage.setImageBitmap(thumbnail);
-            base64Img = convertBitMapToString(thumbnail);
+            iconBase64Img = convertBitMapToString(thumbnail);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void onPictureSelected(Intent data) {
+        Uri selectedImage = data.getData();
+        Log.w("Selected Image: ", selectedImage.toString());
+
+        try {
+            Size size = getImageSize(selectedImage);
+            Log.w("Original size: ", size.toString());
+
+            size = resizeToMax(size, 400);
+            Log.w("Image dimension", size.toString());
+
+            ContentResolver resolver = getApplicationContext().getContentResolver();
+            Bitmap thumbnail = resolver.loadThumbnail(selectedImage, size, null);
+            pictureImage.setImageBitmap(thumbnail);
+            pictureBase64Img = convertBitMapToString(thumbnail);
 
         } catch (Exception e) {
             e.printStackTrace();
