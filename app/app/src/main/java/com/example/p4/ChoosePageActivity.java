@@ -32,6 +32,9 @@ public class ChoosePageActivity extends AppCompatActivity {
 
         spinnerPages = findViewById(R.id.spinner);
 
+        String pagetype = getIntent().getStringExtra("pageType");
+        Log.d("pagetype", pagetype);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         loadingSpinner = (ProgressBar) findViewById(R.id.loadingSpinner);
@@ -39,13 +42,13 @@ public class ChoosePageActivity extends AppCompatActivity {
         pagesArr.add("Ny Side");
 
         db.collection("pages")
+                .whereEqualTo("type", pagetype)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId() + " => " + document.getData());
                                 pagesArr.add(document.getData().get("name").toString());
                             }
                             LoadPagesIntoSpinner(pagesArr);
