@@ -73,10 +73,10 @@ public class ChoosePageActivity extends AppCompatActivity {
         //Send to new page with id of the selected page
         String selectedPage = spinnerPages.getSelectedItem().toString();
         Intent intent;
-        if (pagetype == "textPage") {
+        if ( pagetype.equals("textPage") ) {
             intent = new Intent(this, PageEditAndCreateActivity.class);
-        } else if (pagetype == "dropdown") {
-            intent = new Intent(this, PageEditAndCreateActivity.class);
+        } else if (pagetype.equals("dropdown")) {
+            intent = new Intent(this, DropdownPage.class);
         } else {
             Log.w("ERROR", "Pagetype not found");
             return;
