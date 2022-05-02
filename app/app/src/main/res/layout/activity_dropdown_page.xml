@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DropdownPage">
+    tools:context=".DropdownPage"
+    android:orientation="vertical"
+    >
 
     <ImageView
         android:id="@+id/iconImage2"
@@ -34,20 +36,80 @@
         android:id="@+id/editTextTextPersonName3"
         android:layout_width="289dp"
         android:layout_height="43dp"
+        android:layout_marginTop="48dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Dropdown titel"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="279dp" />
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconImage2" />
 
     <EditText
         android:id="@+id/editTextTextMultiLine"
         android:layout_width="290dp"
         android:layout_height="103dp"
+        android:layout_marginTop="3dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        tools:layout_editor_absoluteX="36dp"
-        tools:layout_editor_absoluteY="322dp" />
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName3"
+        app:layout_constraintHorizontal_bias="0.297"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName3"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="27dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="41dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextTextMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextTextMultiLine"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/bin" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="51dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="64dp"
+        android:onClick="addDropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dropdownContainer"
+        app:srcCompat="@drawable/plus" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="Gem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <ScrollView
+        android:id="@+id/dropdownContainer"
+        android:layout_width="234dp"
+        android:layout_height="197dp"
+        android:layout_marginTop="284dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.429"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="229dp"></LinearLayout>
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
