@@ -24,6 +24,7 @@ public class ChoosePageActivity extends AppCompatActivity {
     Spinner spinnerPages;
     ProgressBar loadingSpinner;
     ArrayList<String> pagesArr = new ArrayList<>();
+    String pagetype;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class ChoosePageActivity extends AppCompatActivity {
 
         spinnerPages = findViewById(R.id.spinner);
 
-        String pagetype = getIntent().getStringExtra("pageType");
+        pagetype = getIntent().getStringExtra("pageType");
         Log.d("pagetype", pagetype);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -70,11 +71,16 @@ public class ChoosePageActivity extends AppCompatActivity {
 
     public void submitPageSelection(View v) {
         //Send to new page with id of the selected page
-
-
         String selectedPage = spinnerPages.getSelectedItem().toString();
-        Log.d("selectedPage", selectedPage);
-        Intent intent = new Intent(this, PageEditAndCreateActivity.class);
+        Intent intent;
+        if (pagetype == "textPage") {
+            intent = new Intent(this, PageEditAndCreateActivity.class);
+        } else if (pagetype == "dropdown") {
+            intent = new Intent(this, PageEditAndCreateActivity.class);
+        } else {
+            Log.w("ERROR", "Pagetype not found");
+            return;
+        }
         intent.putExtra("selectedPage", selectedPage);
         startActivity(intent);
     }
