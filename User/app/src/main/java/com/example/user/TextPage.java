@@ -52,6 +52,7 @@ public class TextPage extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("TextPage", "DocumentSnapshot data: " + document.getData());
+                        setTitle(document.getString("name"));
 
                         if (document.getData().get("picture") != null) {
                             String base64Img = document.getData().get("picture").toString();
