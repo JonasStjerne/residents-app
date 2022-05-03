@@ -2,33 +2,29 @@
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditText
-        android:id="@+id/titleDropwdown"
-        android:layout_width="289dp"
-        android:layout_height="43dp"
+        android:id="@+id/titleDropdown"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:layout_marginTop="48dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Dropdown titel"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
+        android:layout_marginBottom="10dp"
+        android:inputType="text"
+        android:text="Dropdown titel" />
 
     <EditText
-        android:id="@+id/editTextTextMultiLine"
-        android:layout_width="290dp"
+        android:id="@+id/dropdownContent"
+        android:layout_width="match_parent"
         android:layout_height="103dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="@+id/titleDropwdown"
-        app:layout_constraintHorizontal_bias="0.297"
-        app:layout_constraintStart_toStartOf="@+id/titleDropwdown"
-        app:layout_constraintTop_toBottomOf="@+id/titleDropwdown" />
+        app:layout_constraintEnd_toEndOf="@+id/titleDropdown"
+        app:layout_constraintHorizontal_bias="2"
+        app:layout_constraintStart_toStartOf="@+id/titleDropdown"
+        app:layout_constraintTop_toBottomOf="@+id/titleDropdown" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -37,9 +33,9 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="41dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextMultiLine"
+        app:layout_constraintBottom_toBottomOf="@+id/dropdownContent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextMultiLine"
+        app:layout_constraintTop_toTopOf="@+id/dropdownContent"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/bin" />
 </RelativeLayout>
