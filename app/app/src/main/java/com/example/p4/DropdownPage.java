@@ -13,14 +13,20 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.protobuf.Any;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +38,7 @@ public class DropdownPage extends AppCompatActivity {
     String pageId;
     EditText titleEl;
     ProgressBar loadingSpinner;
+    int dropDownAddedId;
 
 
     @Override
@@ -45,24 +52,27 @@ public class DropdownPage extends AppCompatActivity {
         inflater = LayoutInflater.from(this);
 
         Intent intent = getIntent();
-        String str = intent.getStringExtra("selectedPage");
+        String selectedPage = intent.getStringExtra("selectedPage");
 
-        pageId = null;
-        loadDataFromFirebase(str);
+        //start values
+        dropDownAddedId = 0;
+
+        //Get firebase instance & load data
+        db = FirebaseFirestore.getInstance();
+        loadDataFromFirebase(selectedPage);
 
     }
 
     //Load elements from firebase if pageid != "Ny Side"
-    private void loadDataFromFirebase(String selectedPage) {
-        //Return if new page
-        if (selectedPage.equals("Ny Side")) {
+    private void loadDataFromFirebase(String pageName) {
+        //If new page add empty dropdown and return
+        if (pageName.equals("Ny Side")) {
+            addDropdown();
             loadingSpinner.setVisibility(View.GONE);
             return;
         }
-
         //Else load data
-        db = FirebaseFirestore.getInstance();
-        db.collection("pages").whereEqualTo("name", selectedPage)
+        db.collection("pages").whereEqualTo("name", pageName)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -70,12 +80,16 @@ public class DropdownPage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 pageId = document.getId().toString();
+                                titleEl.setText(document.get("name").toString());
                                 db.collection("pages/" + pageId + "/items")
                                         .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if (task.isSuccessful()) {
-                                                    CreateAndPopulateLayout(document.getData(), task.getResult());
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        addDropdown(document.getId(), document.getData());
+                                                    }
+                                                    //CreateAndPopulateLayout(document.getData(), task.getResult());
                                                 } else {
                                                     Log.w("TAG", "Error getting documents.", task.getException());
                                                 }
@@ -101,12 +115,73 @@ public class DropdownPage extends AppCompatActivity {
     }
 
     //Save new page to firebase if id == "Ny side" else edit existing record
+    public void createOrSavePage(View view) {
+        Map<String, Object> page = new HashMap<>();
+        page.put("name", titleEl.getText().toString());
+        //page.put("icon", base64Img);
+        page.put("type", "dropdown");
 
+        ArrayList<Object> items = new ArrayList<Object>();
+
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View v = layout.getChildAt(i);
+            Map<String, Object> item = new HashMap<>();
+            item.put("content", v.findViewById(R.id.dropdownContent));
+            item.put("title", v.findViewById(R.id.titleDropdown));
+            items.add(item);
+        }
+        if (pageId == null) {
+            db.collection("pages")
+                    .add(page)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            String newPageId = documentReference.getId();
+
+                            for (Object item: items) {
+                                db.collection("pages/" + newPageId + "/items").add(item)
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                    Log.d("Added", "dropdown item");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("Firebase", "Error adding dropdown item", e);
+                                            }
+                                        });
+                            }
+                            pageId = newPageId;
+                            Toast.makeText(getApplicationContext(), "New page created successfully", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("Firebase", "Error adding document", e);
+                            Toast.makeText(getApplicationContext(), "Failed to create page", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        } else {
+
+        }
+    }
 
 
     //Add new dropdown element. Called at onclick from plus button
+    public void addDropdown(View v){
+        dropdownElement = getLayoutInflater().inflate(R.layout.dropdown_element, null, false);
+        dropdownElement.setTag(dropDownAddedId);
+        dropDownAddedId++;
+        layout.addView(dropdownElement);
+    }
+
     public void addDropdown(){
         dropdownElement = getLayoutInflater().inflate(R.layout.dropdown_element, null, false);
+        dropdownElement.setTag(dropDownAddedId);
+        dropDownAddedId++;
         layout.addView(dropdownElement);
     }
 
