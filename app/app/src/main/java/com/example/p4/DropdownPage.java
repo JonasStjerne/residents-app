@@ -125,7 +125,7 @@ public class DropdownPage extends AppCompatActivity {
         //List to save dropdown data
         ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
 
-        //For ervery dropdown add it to the list as a Hashmap
+        //For every dropdown add it to the list as a Hashmap
         for (int i = 0; i < layout.getChildCount(); i++) {
             View v = layout.getChildAt(i);
             HashMap<String, Object> item = new HashMap<>();
@@ -198,6 +198,7 @@ public class DropdownPage extends AppCompatActivity {
     public void addDropdown(String itemId, Map<String, Object> data){
         dropdownElement = getLayoutInflater().inflate(R.layout.dropdown_element, null, false);
         dropdownElement.setTag(itemId);
+        dropdownElement.findViewById(R.id.deleteBtn).setTag(itemId);
         EditText titleDropdown = (EditText) dropdownElement.findViewById(R.id.titleDropdown);
         titleDropdown.setText(data.get("title").toString());
         EditText contentDropdown = (EditText) dropdownElement.findViewById(R.id.dropdownContent);
@@ -206,6 +207,7 @@ public class DropdownPage extends AppCompatActivity {
     }
 
     public void removeDropdown(View v) {
-
+        layout.removeView(layout.findViewWithTag(v.getTag().toString()));
+        Log.d("Tryk", v.getTag().toString());
     }
 }
