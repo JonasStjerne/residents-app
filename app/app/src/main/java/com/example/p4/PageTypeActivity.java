@@ -24,15 +24,6 @@ public class PageTypeActivity extends AppCompatActivity {
     }
 
     public void textPage(View v) {
-
-        Intent intent = new Intent(this, ChoosePageActivity.class);
-        intent.putExtra("pageType", "textPage");
-        startActivity(intent);
-    }
-
-    public void dropdownPage(View v) {
-        Intent intent = new Intent(this, ChoosePageActivity.class);
-        intent.putExtra("pageType", "dropdown");
-        startActivity(intent);
+        startActivity(new Intent(this, ChoosePageActivity.class));
     }
 }
