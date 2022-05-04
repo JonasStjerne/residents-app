@@ -138,44 +138,57 @@ public class DropdownPage extends AppCompatActivity {
         }
 
         //If the page is a new page
-        if (pageId == null) {
-            db.collection("pages")
-                    .add(page)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        if (pageId != null) {
+            db.collection("pages").document(pageId)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            String newPageId = documentReference.getId();
-                            for (HashMap<String, Object> item: items) {
-                                db.collection("pages")
-                                .document(newPageId)
-                                .collection("items").add(item)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                    Log.d("Added", "dropdown item");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w("Firebase", "Error adding dropdown item", e);
-                                            }
-                                        });
-                            }
-                            pageId = newPageId;
-                            Toast.makeText(getApplicationContext(), "New page created successfully", Toast.LENGTH_LONG).show();
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Sucess", "DocumentSnapshot successfully deleted!");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.w("Firebase", "Error adding document", e);
-                            Toast.makeText(getApplicationContext(), "Failed to create page", Toast.LENGTH_LONG).show();
+                            Log.w("Error", "Error deleting document", e);
                         }
                     });
-        } else {
-
         }
+        db.collection("pages")
+                .add(page)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        String newPageId = documentReference.getId();
+                        for (HashMap<String, Object> item: items) {
+                            db.collection("pages")
+                            .document(newPageId)
+                            .collection("items").add(item)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                                Log.d("Added", "dropdown item");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("Firebase", "Error adding dropdown item", e);
+                                        }
+                                    });
+                        }
+                        pageId = newPageId;
+                        Toast.makeText(getApplicationContext(), "Successfully saved", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firebase", "Error adding document", e);
+                        Toast.makeText(getApplicationContext(), "Failed to create page", Toast.LENGTH_LONG).show();
+                    }
+                });
+
     }
 
 
