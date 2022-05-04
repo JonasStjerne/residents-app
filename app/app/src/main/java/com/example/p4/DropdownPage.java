@@ -116,20 +116,28 @@ public class DropdownPage extends AppCompatActivity {
 
     //Save new page to firebase if id == "Ny side" else edit existing record
     public void createOrSavePage(View view) {
+        //Save Title and pagetype in page object
         Map<String, Object> page = new HashMap<>();
         page.put("name", titleEl.getText().toString());
         //page.put("icon", base64Img);
         page.put("type", "dropdown");
 
-        ArrayList<Object> items = new ArrayList<Object>();
+        //List to save dropdown data
+        ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
 
+        //For ervery dropdown add it to the list as a Hashmap
         for (int i = 0; i < layout.getChildCount(); i++) {
             View v = layout.getChildAt(i);
-            Map<String, Object> item = new HashMap<>();
-            item.put("content", v.findViewById(R.id.dropdownContent));
-            item.put("title", v.findViewById(R.id.titleDropdown));
+            HashMap<String, Object> item = new HashMap<>();
+            EditText dropDownContent = (EditText) v.findViewById(R.id.dropdownContent);
+            EditText dropDownTitle = (EditText) v.findViewById(R.id.titleDropdown);
+            item.put("content", dropDownContent.getText().toString());
+            item.put("title", dropDownTitle.getText().toString());
             items.add(item);
+            Log.d("Dropdown content: ", items.get(i).get("content").toString());
         }
+
+        //If the page is a new page
         if (pageId == null) {
             db.collection("pages")
                     .add(page)
@@ -137,9 +145,10 @@ public class DropdownPage extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             String newPageId = documentReference.getId();
-
-                            for (Object item: items) {
-                                db.collection("pages/" + newPageId + "/items").add(item)
+                            for (HashMap<String, Object> item: items) {
+                                db.collection("pages")
+                                .document(newPageId)
+                                .collection("items").add(item)
                                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                             @Override
                                             public void onSuccess(DocumentReference documentReference) {
