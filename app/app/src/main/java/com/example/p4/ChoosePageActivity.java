@@ -24,6 +24,7 @@ public class ChoosePageActivity extends AppCompatActivity {
     Spinner spinnerPages;
     ProgressBar loadingSpinner;
     ArrayList<String> pagesArr = new ArrayList<>();
+    String pagetype;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,9 @@ public class ChoosePageActivity extends AppCompatActivity {
 
         spinnerPages = findViewById(R.id.spinner);
 
+        pagetype = getIntent().getStringExtra("pageType");
+        Log.d("pagetype", pagetype);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         loadingSpinner = (ProgressBar) findViewById(R.id.loadingSpinner);
@@ -39,13 +43,13 @@ public class ChoosePageActivity extends AppCompatActivity {
         pagesArr.add("Ny Side");
 
         db.collection("pages")
+                .whereEqualTo("type", pagetype)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId() + " => " + document.getData());
                                 pagesArr.add(document.getData().get("name").toString());
                             }
                             LoadPagesIntoSpinner(pagesArr);
@@ -67,11 +71,16 @@ public class ChoosePageActivity extends AppCompatActivity {
 
     public void submitPageSelection(View v) {
         //Send to new page with id of the selected page
-
-
         String selectedPage = spinnerPages.getSelectedItem().toString();
-        Log.d("selectedPage", selectedPage);
-        Intent intent = new Intent(this, PageEditAndCreateActivity.class);
+        Intent intent;
+        if ( pagetype.equals("textPage") ) {
+            intent = new Intent(this, PageEditAndCreateActivity.class);
+        } else if (pagetype.equals("dropdown")) {
+            intent = new Intent(this, DropdownPage.class);
+        } else {
+            Log.w("ERROR", "Pagetype not found");
+            return;
+        }
         intent.putExtra("selectedPage", selectedPage);
         startActivity(intent);
     }
