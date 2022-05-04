@@ -13,6 +13,9 @@
             android:name=".PageEditAndCreateActivity"
             android:exported="false" />
         <activity
+            android:name=".DropdownPage"
+            android:exported="false" />
+        <activity
             android:name=".ChoosePageActivity"
             android:exported="false" />
         <activity
