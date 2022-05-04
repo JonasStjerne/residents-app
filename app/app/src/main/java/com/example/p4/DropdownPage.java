@@ -182,32 +182,45 @@ public class DropdownPage extends AppCompatActivity {
     //Add new dropdown element. Called at onclick from plus button
     public void addDropdown(View v){
         dropdownElement = getLayoutInflater().inflate(R.layout.dropdown_element, null, false);
-        dropdownElement.setTag(dropDownAddedId);
+        dropdownElement.setTag(Integer.toString(dropDownAddedId));
+        dropdownElement.findViewById(R.id.deleteBtn).setTag(Integer.toString(dropDownAddedId));
         dropDownAddedId++;
         layout.addView(dropdownElement);
     }
 
     public void addDropdown(){
         dropdownElement = getLayoutInflater().inflate(R.layout.dropdown_element, null, false);
-        dropdownElement.setTag(dropDownAddedId);
+        dropdownElement.setTag(Integer.toString(dropDownAddedId));
+        dropdownElement.findViewById(R.id.deleteBtn).setTag(Integer.toString(dropDownAddedId));
         dropDownAddedId++;
         layout.addView(dropdownElement);
     }
 
     //Overload method. On call populate dropdown element and append to GUI
     public void addDropdown(String itemId, Map<String, Object> data){
+        //Import element
         dropdownElement = getLayoutInflater().inflate(R.layout.dropdown_element, null, false);
+
+        //Set tag from parameter
         dropdownElement.setTag(itemId);
+        //set tag for button from parameter
         dropdownElement.findViewById(R.id.deleteBtn).setTag(itemId);
+
+        //Get title element
         EditText titleDropdown = (EditText) dropdownElement.findViewById(R.id.titleDropdown);
+
+        //Populate data into element
         titleDropdown.setText(data.get("title").toString());
+        // -||-
         EditText contentDropdown = (EditText) dropdownElement.findViewById(R.id.dropdownContent);
         contentDropdown.setText(data.get("content").toString());
+
+        //Add element to view
         layout.addView(dropdownElement);
     }
 
     public void removeDropdown(View v) {
+        Log.d("Removing with id", v.getTag().toString());
         layout.removeView(layout.findViewWithTag(v.getTag().toString()));
-        Log.d("Tryk", v.getTag().toString());
     }
 }
