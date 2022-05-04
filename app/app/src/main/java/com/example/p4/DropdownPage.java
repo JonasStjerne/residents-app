@@ -1,14 +1,26 @@
 package com.example.p4;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -25,6 +37,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.protobuf.Any;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,18 +52,24 @@ public class DropdownPage extends AppCompatActivity {
     String pageId;
     EditText titleEl;
     ProgressBar loadingSpinner;
+    ImageView iconImage;
     int dropDownAddedId;
+
+    String iconBase64Img;
+    private ActivityResultLauncher<Intent> iconLauncher;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dropdown_page);
+        setTitle("Himmerland");
 
         layout = (LinearLayout) findViewById(R.id.layout);
         titleEl = (EditText) findViewById(R.id.title);
         loadingSpinner = (ProgressBar) findViewById(R.id.loadingSpinner);
         inflater = LayoutInflater.from(this);
+        iconImage = (ImageView) findViewById(R.id.iconImage2);
 
         Intent intent = getIntent();
         String selectedPage = intent.getStringExtra("selectedPage");
@@ -61,6 +81,23 @@ public class DropdownPage extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         loadDataFromFirebase(selectedPage);
 
+        iconImage.setOnClickListener(v -> selectIcon());
+
+        // used when icon is selected in photo album
+        iconLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                onIconSelected(data);
+                            }
+
+                        }
+                    }
+                }
+        );
     }
 
     //Load elements from firebase if pageid != "Ny Side"
@@ -122,6 +159,7 @@ public class DropdownPage extends AppCompatActivity {
         page.put("name", titleEl.getText().toString());
         //page.put("icon", base64Img);
         page.put("type", "dropdown");
+        page.put("icon", iconBase64Img);
 
         //List to save dropdown data
         ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
@@ -262,4 +300,77 @@ public class DropdownPage extends AppCompatActivity {
                     }
                 });
     }
+
+
+
+    // Icon
+    private void selectIcon() {
+        final CharSequence[] options = {"Choose from Gallery", "Cancel"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(DropdownPage.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(options, (dialog, item) -> {
+            if (item == 0) {
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                iconLauncher.launch(intent);
+            } else {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void onIconSelected(Intent data) {
+        Uri selectedImage = data.getData();
+        Log.w("Selected Image: ", selectedImage.toString());
+
+        try {
+            Size size = getImageSize(selectedImage);
+            Log.w("Original size: ", size.toString());
+
+            size = resizeToMax(size, 400);
+            Log.w("Image dimension", size.toString());
+
+            ContentResolver resolver = getApplicationContext().getContentResolver();
+            Bitmap thumbnail = resolver.loadThumbnail(selectedImage, size, null);
+            iconImage.setImageBitmap(thumbnail);
+            iconBase64Img = convertBitMapToString(thumbnail);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private String convertBitMapToString(Bitmap img) {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        img.compress(Bitmap.CompressFormat.PNG, 60, os);
+        byte[] b = os.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    private Size getImageSize(Uri imagePath) throws FileNotFoundException {
+        ContentResolver resolver = getApplicationContext().getContentResolver();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(resolver.openInputStream(imagePath), null, options);
+        return new Size(options.outWidth, options.outHeight);
+    }
+
+    private Size resizeToMax(Size size, int maxSize) {
+        int width = size.getWidth();
+        int height = size.getHeight();
+
+        float ratio = (float) width / (float) height;
+        if (ratio > 1) {
+            width = maxSize;
+            height = (int) (width / ratio);
+        } else {
+            height = maxSize;
+            width = (int) (height * ratio);
+        }
+        return new Size(width, height);
+    }
+
+
 }

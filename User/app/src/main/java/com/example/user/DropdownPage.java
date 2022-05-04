@@ -88,7 +88,7 @@ public class DropdownPage extends AppCompatActivity {
         // Title bar with title and image
         ConstraintLayout titleBar = new ConstraintLayout(this);
         titleBar.setId(View.generateViewId());
-        titleBar.setBackgroundColor(Color.DKGRAY);
+        titleBar.setBackgroundColor(Color.rgb(0,157,72));
         titleBar.setPadding(5, 5, 5, 5);
         titleBar.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT));
 
@@ -130,7 +130,7 @@ public class DropdownPage extends AppCompatActivity {
         body.setText(content);
         body.setTextSize(16);
         body.setPadding(5, 3, 0, 3);
-        body.setTextColor(Color.DKGRAY);
+        body.setTextColor(Color.WHITE);
         body.setVisibility(View.GONE); // start out as hidden
 
         cardLayout.addView(titleBar);
@@ -148,7 +148,7 @@ public class DropdownPage extends AppCompatActivity {
         CardView card = new CardView(this);
         card.setId(View.generateViewId());
         card.setPadding(15,5,15,5);
-        card.setCardBackgroundColor(Color.LTGRAY);
+        card.setCardBackgroundColor(Color.rgb(0,157,72));
         card.setCardElevation(5);
         card.setContentPadding(5, 5, 5, 5);
         card.setRadius(20);
