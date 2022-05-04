@@ -15,6 +15,7 @@ public class PageTypeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_site_type);
+        setTitle("Himmerland");
         Log.d("action", "Created");
     }
 

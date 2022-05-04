@@ -15,14 +15,16 @@
             android:parentActivityName=".ChoosePageActivity"/>
         <activity
             android:name=".DropdownPage"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ChoosePageActivity"/>
         <activity
             android:name=".ChoosePageActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ChoosePageActivity"/>
         <activity
             android:name=".PageTypeActivity"
             android:exported="false"
-            android:parentActivityName=".ChoosePageActivity"/>
+            />
         <activity
             android:name=".LoginActivity"
             android:exported="true" >
