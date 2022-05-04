@@ -67,6 +67,7 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_edit_and_create);
+        setTitle("Himmerland");
 
         pageTitleEl = (EditText) findViewById(R.id.pageTitle);
         pageContentEl = (EditText) findViewById(R.id.pageContent);
