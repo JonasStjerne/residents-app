@@ -211,12 +211,14 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Firebase", "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(getApplicationContext(), "Successfully deleted page", Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w("Firebase", "Error deleting document", e);
+                        Toast.makeText(getApplicationContext(), "Failed to delete page", Toast.LENGTH_LONG).show();
                     }
                 });
     }
