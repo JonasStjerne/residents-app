@@ -12,15 +12,15 @@
         <activity
             android:name=".PageEditAndCreateActivity"
             android:exported="false"
-            android:parentActivityName=".ChoosePageActivity"/>
+            android:parentActivityName=".PageTypeActivity"/>
         <activity
             android:name=".DropdownPage"
             android:exported="false"
-            android:parentActivityName=".ChoosePageActivity"/>
+            android:parentActivityName=".PageTypeActivity"/>
         <activity
             android:name=".ChoosePageActivity"
             android:exported="false"
-            android:parentActivityName=".ChoosePageActivity"/>
+            android:parentActivityName=".PageTypeActivity"/>
         <activity
             android:name=".PageTypeActivity"
             android:exported="false"
