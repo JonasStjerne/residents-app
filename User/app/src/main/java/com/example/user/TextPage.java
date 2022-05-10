@@ -23,6 +23,7 @@ import android.widget.TextView;
 import java.util.Base64;
 
 import io.noties.markwon.Markwon;
+import io.noties.markwon.html.HtmlPlugin;
 
 
 public class TextPage extends AppCompatActivity {
@@ -38,7 +39,8 @@ public class TextPage extends AppCompatActivity {
         contentContainer = (TextView) findViewById(R.id.content);
         pictureImage = (ImageView) findViewById(R.id.pictureImage);
 
-        final Markwon markwon = Markwon.create(this);
+        final Markwon markwon = Markwon.builder(this).usePlugin(HtmlPlugin.create()).build();
+        //final Markwon markwon = Markwon.create(this);
 
         Intent intent = getIntent();
         String pageId = intent.getStringExtra("PageId");

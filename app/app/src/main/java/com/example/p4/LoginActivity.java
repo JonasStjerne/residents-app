@@ -67,13 +67,13 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d( "test", "signInWithEmail:success");
+                            // Sign in success
                             Toast.makeText(getApplicationContext(), "Authentication successful.",
                                     Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
