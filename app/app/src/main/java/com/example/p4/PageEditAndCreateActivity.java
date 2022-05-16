@@ -96,7 +96,8 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                                 setPageFields(
                                         document.getData().get("name").toString(),
                                         document.getData().get("content").toString(),
-                                        document.getData().get("icon").toString()
+                                        document.getData().get("icon").toString(),
+                                        document.getData().get("picture").toString()
                                 );
                                 pageId = document.getId().toString();
                                 deletePageButton.setVisibility(View.VISIBLE);
@@ -149,9 +150,51 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
         pageContentEl.addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor));
     }
 
-    private void setPageFields(String name, String content, String icon) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setPageFields(String name, String content, String icon, String picture) {
         pageTitleEl.setText(name);
         pageContentEl.setText(content);
+
+        if (picture != null) {
+            if (picture.length()>0) {
+                if (picture.startsWith("data:image/jpeg;base64,")) {
+                    picture = picture.substring("data:image/jpeg;base64,".length());
+                }
+
+                try {
+                    picture = picture.replaceAll("\n", "");
+                    byte[] imgData = java.util.Base64.getDecoder().decode(picture);
+                    Bitmap image = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
+                    pictureImage.setImageBitmap(image);
+
+                }
+                catch (Exception e) {
+                    Log.e("Main", "Error decoding image", e);
+                }
+
+            }
+        }
+
+        if (icon != null) {
+            if (icon.length()>0) {
+                if (icon.startsWith("data:image/jpeg;base64,")) {
+                    icon = icon.substring("data:image/jpeg;base64,".length());
+                }
+
+                try {
+                    icon = icon.replaceAll("\n", "");
+                    byte[] imgData = java.util.Base64.getDecoder().decode(icon);
+                    Bitmap image = BitmapFactory.decodeByteArray(imgData, 0, imgData.length);
+                    iconImage.setImageBitmap(image);
+
+                }
+                catch (Exception e) {
+                    Log.e("Main", "Error decoding image", e);
+                }
+
+            }
+        }
+
         submitButton.setText("Gem");
     }
 
