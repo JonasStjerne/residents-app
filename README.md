@@ -1,5 +1,4 @@
-# P4
-Android application for Himmerland Boligforening
+# Android application for Himmerland Boligforening
 
 A mobile application developed in collaboration with Himmerland Boligforening for our 4th semester project.
 Himmerland Boligforening needed a centrelised and accesible way to share information with their residents.
