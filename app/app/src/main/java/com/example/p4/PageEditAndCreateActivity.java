@@ -108,6 +108,7 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                         loadingSpinner.setVisibility(View.GONE);
                     }
                 });
+        
         // used when icon is selected in photo album
         iconLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
