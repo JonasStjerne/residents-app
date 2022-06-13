@@ -94,10 +94,10 @@ public class PageEditAndCreateActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("TAG", document.getId() + " => " + document.getData());
                                 setPageFields(
-                                        document.getData().get("name").toString(),
-                                        document.getData().get("content").toString(),
-                                        document.getData().get("icon").toString(),
-                                        document.getData().get("picture").toString()
+                                        document.getString("name"),
+                                        document.getString("content"),
+                                        document.getString("icon"),
+                                        document.getString("picture")
                                 );
                                 pageId = document.getId().toString();
                                 deletePageButton.setVisibility(View.VISIBLE);
